@@ -103,8 +103,18 @@ class SWORDAPPClient {
 
 		$sac_resp = curl_exec($sac_curl);
 		$sac_status = curl_getinfo($sac_curl, CURLINFO_HTTP_CODE);
+		$sac_errno = curl_errno($sac_curl);
+		$sac_error = curl_error($sac_curl);
 
 		curl_close($sac_curl);
+
+		if ($sac_resp === false) {
+			throw new RuntimeException(sprintf(
+				'SWORD deposit transport failed (cURL %d): %s',
+				$sac_errno,
+				$sac_error
+			));
+		}
 
 		// Parse the result
 		$sac_dresponse = new SWORDAPPEntry($sac_status, $sac_resp);
