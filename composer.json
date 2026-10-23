@@ -7,6 +7,11 @@
         {
             "name": "Matthew Fritz",
             "email": "mattf@burbankparanormal.com"
+        },
+        {
+            "name": "Luis Guzman",
+            "email": "contact@luisjg.dev",
+            "role": "Maintainer"
         }
     ],
     "require": {

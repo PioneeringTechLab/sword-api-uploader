@@ -79,16 +79,18 @@ class SwordUploader
 		catch(SwordHttpException $e) {
 			if(stripos($e->getMessage(), "response entry") !== FALSE) {
 				// the upload was successful but the response was not parseable
-				throw new CannotParseDepositResponseException($e->getMessage());
+				throw new CannotParseDepositResponseException($e->getMessage(), $e->getCode(), $e);
 			}
 			elseif(stripos($e->getMessage(), "error document") !== FALSE) {
 				// the upload failed and the error document could not be parsed
-				throw new CannotParseDepositErrorResponseException($e->getMessage());
+				throw new CannotParseDepositErrorResponseException($e->getMessage(), $e->getCode(), $e);
 			}
+			// Preserve other HTTP failures instead of silently swallowing them.
+			throw new DepositException($e->getMessage(), $e->getCode(), $e);
 		}
 		catch(Exception $e) {
 			// some other kind of exception occurred
-			throw new DepositException($e->getMessage());
+			throw new DepositException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 
